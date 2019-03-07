@@ -51,6 +51,54 @@ describe(`User Integration Testing`, function () {
                     throw err;
                 });
         });
+        it(`should show a user has all the correct Keys in it`, function () {
+            let resUser;
+            const userKeys = [`userId`, `userName`];
+            return chai.request(app)
+                .get(`/users`)
+                .then(function (_res) {
+                    resUser = _res.body[0];
+                    expect(resUser).to.have.keys(userKeys);
+                    return Users.findOne({ "_id": resUser.userId });
+                })
+                .then(function (chosenUser) {
+                    userKeys.forEach(function (key) {
+                        if (key !== "userId") {
+                            expect(resUser[key]).to.equal(chosenUser[key]);
+                        }
+                    });
+                    expect(chosenUser).to.have.property(`userPassword`);
+                })
+                .catch(function (error) {
+                    throw error;
+                });
+        });
+
+        it(`should return the user through the GET request specifying a particular id `, function () {
+            const userKeys = [`userId`, `userName`];
+
+            let resUser;
+            return Users.findOne()
+                .then(function (user) {
+                    return chai.request(app)
+                        .get(`/users/${user._id}`)
+                        .then(function (_res) {
+                            resUser = _res.body;
+                            userKeys.forEach(function (key) {
+                                if (key !== "userId") {
+                                    expect(resUser[key]).to.equal(user[key]);
+                                }
+                            });
+                            return Users.findOne({ "_id": resUser.userId });
+                        })
+                        .then(function (chosenUser) {
+                            expect(chosenUser._id.toString()).to.equal(resUser.userId);
+                        });
+                })
+                .catch(function (error) {
+                    throw error;
+                });
+        });
     });
 });
 
