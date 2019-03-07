@@ -5,9 +5,18 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "test": "mocha --exit"
   },
   "dependencies": {
+    "body-parser": "^1.18.3",
+    "chai": "^4.2.0",
+    "chai-http": "^4.2.1",
+    "express": "^4.16.4",
+    "faker": "^4.1.0",
+    "mocha": "^6.0.2",
+    "mongoose": "^5.4.17",
+    "morgan": "^1.9.1",
     "vue": "^2.5.22"
   },
   "devDependencies": {
